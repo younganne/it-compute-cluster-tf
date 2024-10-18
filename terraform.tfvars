@@ -1,0 +1,5 @@
+key-name                    = "anne-key"
+network-security-group-name = "allow-TLS"
+#ubuntu-ami                  = "ami-01a8b7cc84780badb"
+ubuntu-instance-type = "t3.micro"
+cidr-ipv4            = "23.93.172.249/32"
