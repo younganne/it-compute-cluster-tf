@@ -2,18 +2,27 @@ variable "key-name" {
   type = string
 }
 
-variable "network-security-group-name" {
-  type = string
+variable "instance_type" {
+  description = "instance_type"
+  type        = string
 }
 
-#variable "ubuntu-ami" {
-#  type = string
-#}
+variable "counter" {
+  description = "Number of instances to launch"
+  type        = number
+}
 
-variable "ubuntu-instance-type" {
-  type = string
+variable "cidr_block" {
+  description = "CIDR Block"
+  type        = string
 }
 
 variable "cidr-ipv4" {
-  type = string
+  description = "CIDR block for security group ingress rules"
+  type        = string
+}
+
+variable "availability_zone" {
+  description = "Availability Zones for the Subnet"
+  type        = string
 }

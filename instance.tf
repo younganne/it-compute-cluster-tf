@@ -1,4 +1,5 @@
-data "aws_ami" "ubuntu" {
+# AMI lookup for Ubuntu Server 24.04 
+data "aws_ami" "ubuntu_ami" {
   most_recent = true
 
   filter {
@@ -19,22 +20,20 @@ data "aws_ami" "ubuntu" {
   owners = ["099720109477"] # Canonical
 }
 
-resource "aws_instance" "prod" {
-  ami = data.aws_ami.ubuntu.id
-  #ami             = var.ubuntu-ami
-  instance_type = var.ubuntu-instance-type
-  subnet_id     = aws_subnet.subnet.id
-  #key_name                    = aws_key_pair.deployer.key_name
-  vpc_security_group_ids      = [aws_security_group.ssh-sg.id]
+# Managed resource for Ubuntu EC2 instance(s)
+resource "aws_instance" "test_env_ec2" {
+  count         = var.counter
+  ami           = data.aws_ami.ubuntu_ami.id
+  instance_type = var.instance_type
+  key_name      = data.aws_key_pair.keys.key_name
+  security_groups = [
+    aws_security_group.security.id
+  ]
   associate_public_ip_address = true
-  key_name                    = data.aws_key_pair.keys.key_name
 
-  #cpu_options {
-  #  core_count       = 2
-  #  threads_per_core = 2
-  #}
+  subnet_id = aws_subnet.subnet.id
 
   tags = {
-    Name = "ubuntu-vm"
+    Name = "IT Compute Cluster"
   }
 }

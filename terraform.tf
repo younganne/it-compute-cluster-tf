@@ -1,4 +1,5 @@
 terraform {
+  required_version = "~> 1.9"
   /*/
   backend "s3" {
     bucket = "import-terraform-state-aey"
@@ -14,10 +15,18 @@ terraform {
       source  = "hashicorp/aws"
       version = "5.72.0"
     }
+    tls = {
+      source  = "hashicorp/tls"
+      version = "4.0.6"
+    }
+
   }
-  required_version = "~> 1.9"
 }
 
 provider "aws" {
   region = "us-west-2"
+}
+
+provider "tls" {
+  # Configuration options
 }
