@@ -1,3 +1,4 @@
+/*/
 output "fingerprint" {
   value = data.aws_key_pair.keys.fingerprint
 }
@@ -6,13 +7,15 @@ output "key-name" {
   value = data.aws_key_pair.keys.key_name
 }
 
+output "subnet_cidr_blocks" {
+  value = [for s in data.aws_subnet.subnet : s.cidr_block]
+}
+
+/*/
 output "id" {
   value = data.aws_key_pair.keys.id
 }
 
-output "subnet_cidr_blocks" {
-  value = [for s in data.aws_subnet.subnet : s.cidr_block]
-}
 
 output "cluster_endpoint" {
   description = "Endpoint for EKS control plane"
