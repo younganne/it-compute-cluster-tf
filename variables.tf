@@ -2,6 +2,19 @@ variable "key-name" {
   type = string
 }
 
+variable "region" {
+  description = "AWS region"
+  type        = string
+}
+
+variable "vpc_id" {
+  type = string
+}
+
+variable "security_group_id" {
+  type = string
+}
+
 variable "instance_type" {
   description = "instance_type"
   type        = string
@@ -17,7 +30,12 @@ variable "cidr_block" {
   type        = string
 }
 
-variable "cidr-ipv4" {
+variable "subnet_cidr" {
+  description = "subnet CIDR Block"
+  type        = string
+}
+
+variable "ingress-ipv4" {
   description = "CIDR block for security group ingress rules"
   type        = string
 }

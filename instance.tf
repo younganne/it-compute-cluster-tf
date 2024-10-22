@@ -21,17 +21,21 @@ data "aws_ami" "ubuntu_ami" {
 }
 
 # Managed resource for Ubuntu EC2 instance(s)
-resource "aws_instance" "test_env_ec2" {
-  count         = var.counter
+resource "aws_instance" "cluster_ec2" {
+  for_each = toset(data.aws_subnets.subnets.ids)
+  #count         = var.counter
   ami           = data.aws_ami.ubuntu_ami.id
   instance_type = var.instance_type
   key_name      = data.aws_key_pair.keys.key_name
+  #subnet_id = data.aws_subnet.subnet.id
+  subnet_id = each.value
+
   security_groups = [
-    aws_security_group.security.id
+    data.aws_security_group.security.id
   ]
   associate_public_ip_address = true
 
-  subnet_id = aws_subnet.subnet.id
+  depends_on = [aws_internet_gateway.cluster_gw]
 
   tags = {
     Name = "IT Compute Cluster"
