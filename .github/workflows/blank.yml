@@ -1,0 +1,43 @@
+name: Update the Kubernetes Cluster
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        include:
+          # Add paths to new projects here
+          - project_name: fake-vm 
+            manifests: |
+              kubernetes/fake-vm
+    name: Deploy to Cluster
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Tailscale
+        uses: tailscale/github-action@v2
+        with:
+          oauth-client-id: ${{ secrets.TS_OAUTH_CLIENT_ID }}
+          oauth-secret: ${{ secrets.TS_OAUTH_SECRET }}
+          tags: tag:cluster-iac
+
+      - name: Install kubectl
+        uses: azure/setup-kubectl@v4
+
+      - name: Set the Kubernetes context
+        uses: azure/k8s-set-context@v4
+        with:
+          method: service-account
+          k8s-url: ${{ secrets.KUBERNETES_URL }}
+          k8s-secret: ${{ secrets.KUBERNETES_SERVICE_ACCOUNT_TOKEN }}
+
+      - name: Deploy to the Kubernetes cluster
+        uses: azure/k8s-deploy@v5
+        with:
+          manifests: ${{ matrix.manifests }}
